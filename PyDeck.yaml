@@ -22,8 +22,8 @@ Port: 7777
 Title: 'Simple Deck'
 Icons Per Line: 8
 Show Label: true
-Pre-action Command: ''
-Post-action Command: ''
+Pre-action: '' # 支持 {APPID} 宏，运行时会替换成相应的 appid
+Post-action: 'nircmd.exe loop 10 1000 savescreenshot {PYDECK_PATH}\static\screenshot\{APPID}.png' # 支持 {APPID} 宏，运行时会替换成相应的 appid
 Apps:
 -   id: 'notepad'
     name: 'Notepad'

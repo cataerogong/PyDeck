@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>{{title}}</title>
+<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
 <style>
     a {
         text-decoration: none;
@@ -59,5 +60,41 @@
         </div>
     </a>
     %end
+    <div id="div_img" style="display:none;position:fixed;left:5%;top:5%;width:90%;height:90%;border:5px dashed greenyellow;background-color:whitesmoke;background-size:100% 100%;font-size:10em;color:green;text-align:center;" onclick="javascript:stop_show=true;" />
 </body>
+<script language="javascript">
+function get_query_params(query) {
+    var obj = {};
+    var arr = query.split("&");
+    for (i=0;i<arr.length;i++) {
+        arr2 = arr[i].split("=");
+        obj[arr2[0]] = arr2[1];
+    }
+    return obj;
+}
+var stop_show = false;
+/* var div_img = document.getElementById("div_img"); */
+var div_img = $('#div_img');
+function show_screenshot(appid, loop_num){
+    console.log(loop_num);
+    if (loop_num <= 10 && !stop_show) {
+        setTimeout(show_screenshot, 1000, appid, loop_num+1);
+        /* div_img.fadeOut(500); */
+        var ts = new Date().getTime();
+        div_img.css("background-image", 'url(/static/screenshot/'+appid+'.png?ts='+ts+')');
+        div_img.text(loop_num);
+        div_img.show(700);
+    } else {
+        location = "/";
+    }
+}
+var url = location.search;
+if (url.length > 0) {
+    params = get_query_params(url.substr(1));
+    if (params.status=="succ") {
+        setTimeout(show_screenshot, 1000, params.appid, 1)
+    }
+}
+
+</script>
 </html>

@@ -1,5 +1,6 @@
 import os.path
 import os
+import py_compile
 
 from bottle import run, static_file, SimpleTemplate, get, redirect
 import chardet
@@ -8,6 +9,7 @@ import yaml
 _version = '0.1.0'
 config = None
 stpl = None
+pydeck_path = os.path.curdir
 
 def open_any_enc(filename, mode='r', default_encoding='ascii'):
     """ open “自动识别文件编码”版本
@@ -49,7 +51,7 @@ def mainpage():
 def icon(filename: str):
     return static_file(filename, root=os.path.abspath('icon/'))
 
-@get('/static/<filename>')
+@get('/static/<filename:re:.+>')
 def icon(filename: str):
     return static_file(filename, root=os.path.abspath('static/'))
 
@@ -62,11 +64,24 @@ def reload():
 def action(appid: str):
     for app in config['Apps']:
         if app['id'] == appid:
-            print('---- Run app[{}] command={}'.format(appid, app['command']))
+            pre = str(config.get('Pre-action', ''))\
+                .replace('{PYDECK_PATH}', pydeck_path)\
+                .replace('{APPID}', appid)
+            if pre:
+                print('---- Run pre-action command: {}'.format(pre))
+                os.system('START "" /I {}'.format(pre))
+            print('---- Run app[{}] command: {}'.format(appid, app['command']))
             # 只考虑运行在 Windows 平台，为了和服务器进程独立开，用了 START
             # 如果要在 linux 平台运行，需要修改这里
             os.system('START "[PyDeck] CMD" /I /D {} {}'.format(app.get('workdir', '.'), app['command']))
-    redirect('/')
+            post = str(config.get('Post-action', ''))\
+                .replace('{PYDECK_PATH}', pydeck_path)\
+                .replace('{APPID}', appid)
+            if post:
+                print('---- Run post-action command: {}'.format(post))
+                os.system('START "" /I {}'.format(post))
+            break
+    redirect('/?status=succ&appid={}'.format(appid))
 
 if __name__ == '__main__':
     print('---- version:', _version)
