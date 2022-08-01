@@ -49,6 +49,10 @@ def mainpage():
 def icon(filename: str):
     return static_file(filename, root=os.path.abspath('icon/'))
 
+@get('/static/<filename>')
+def icon(filename: str):
+    return static_file(filename, root=os.path.abspath('static/'))
+
 @get('/reload')
 def reload():
     init()

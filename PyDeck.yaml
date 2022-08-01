@@ -22,6 +22,8 @@ Port: 7777
 Title: 'Simple Deck'
 Icons Per Line: 8
 Show Label: true
+Pre-action Command: ''
+Post-action Command: ''
 Apps:
 -   id: 'notepad'
     name: 'Notepad'
