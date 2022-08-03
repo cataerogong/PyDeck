@@ -1,15 +1,14 @@
 import os.path
 import os
-import py_compile
 
 from bottle import run, static_file, SimpleTemplate, get, redirect
 import chardet
 import yaml
 
-_version = '0.1.0'
+_version = '0.2.0'
 config = None
 stpl = None
-pydeck_path = os.path.curdir
+pydeck_path = os.path.abspath(os.path.curdir)
 
 def open_any_enc(filename, mode='r', default_encoding='ascii'):
     """ open “自动识别文件编码”版本
@@ -41,6 +40,7 @@ def mainpage():
     return stpl.render(
         version=_version,
         title=config['Title'],
+        theme=config.get('Theme', 'default'),
         icon_width=int(100/config['Icons Per Line'])-2,
         show_label=config['Show Label'],
         apps=config.get('Apps', [])
@@ -67,19 +67,27 @@ def action(appid: str):
             pre = str(config.get('Pre-action', ''))\
                 .replace('{PYDECK_PATH}', pydeck_path)\
                 .replace('{APPID}', appid)
-            if pre:
-                print('---- Run pre-action command: {}'.format(pre))
-                os.system('START "" /I {}'.format(pre))
-            print('---- Run app[{}] command: {}'.format(appid, app['command']))
-            # 只考虑运行在 Windows 平台，为了和服务器进程独立开，用了 START
-            # 如果要在 linux 平台运行，需要修改这里
-            os.system('START "[PyDeck] CMD" /I /D {} {}'.format(app.get('workdir', '.'), app['command']))
             post = str(config.get('Post-action', ''))\
                 .replace('{PYDECK_PATH}', pydeck_path)\
                 .replace('{APPID}', appid)
+            cmd = str(app['command'])\
+                .replace('{PYDECK_PATH}', pydeck_path)\
+                .replace('{APPID}', appid)
+            pwd = str(app.get('workdir', '.'))\
+                .replace('{PYDECK_PATH}', pydeck_path)\
+                .replace('{APPID}', appid)
+            print('')
+            # 只考虑运行在 Windows 平台，为了和服务器进程独立开，用了 START
+            # 如果要在 linux 平台运行，需要修改
+            if pre:
+                print('---- Run pre-action: {}'.format(pre))
+                os.system('START "" /I {}'.format(pre))
+            print('---- Run app[{}]: {}'.format(appid, cmd))
+            os.system('START "[PyDeck] CMD" /I /D {} {}'.format(pwd, cmd))
             if post:
-                print('---- Run post-action command: {}'.format(post))
+                print('---- Run post-action: {}'.format(post))
                 os.system('START "" /I {}'.format(post))
+            print('')
             break
     redirect('/?status=succ&appid={}'.format(appid))
 

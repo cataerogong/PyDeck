@@ -1,30 +1,14 @@
-# Port: Web 服务侦听端口，防火墙要开放这个端口，否则其他设备无法连接 Web 服务。
-# Title: 面板名称
-# Icons Per Line: 每行应用图标个数
-# Show Label: 是否显示应用名称，true|false
-# Apps: 应用列表
-# -   id: 应用ID，纯英文字符串
-#     name: 应用显示名称
-#     icon: 应用图标文件名，存放目录：PyDeck\icon，浏览器支持显示的格式都行，最好是正方形。
-#     command: 应用实际执行命令
-#     workdir: 应用起始路径，可有可无
-#
-# 所有字符串值最好都加英文单引号(')。
-# 
-# command 和 workdir 中，如果文件名或路径中有空格，需要加双引号。
-#
-# command 和 workdir 的正确格式：
-#
-#   可以认为在 PyDeck 服务器中有一个隐藏的 cmd 窗口，执行 `START "[PyDeck] CMD" /I /D workdir command`。
-#
-#   因此，如果将 command 和 workdir 填入其中后，在普通 cmd 窗口中可以运行成功，那么基本上 PyDeck 也可以成功执行命令。
 Port: 7777
-Title: 'Simple Deck'
+Title: '极端低配 / 无售后 / 功能全靠 DIY 版 Deck'
+Theme: 'default'
 Icons Per Line: 8
 Show Label: true
-Pre-action: '' # 支持 {APPID} 宏，运行时会替换成相应的 appid
-Post-action: 'nircmd.exe loop 10 1000 savescreenshot {PYDECK_PATH}\static\screenshot\{APPID}.png' # 支持 {APPID} 宏，运行时会替换成相应的 appid
+# Pre-action: ''
+# 执行命令后以0.5s间隔连续截屏20次
+# Post-action: 'nircmd.exe loop 20 500 savescreenshot "{PYDECK_PATH}\static\screenshot\{APPID}.png"'
 Apps:
+-   id: '<RELOAD>'
+-   id: '<BR>'
 -   id: 'notepad'
     name: 'Notepad'
     icon: 'notepad.png'
@@ -37,9 +21,8 @@ Apps:
     name: '命令提示符'
     icon: 'cmd.png'
     command: 'C:\Windows\System32\cmd.exe'
-    workdir: '"C:\Program Files\"' # 设置起始位置，打开的 cmd 窗口将位于 "C:\Program Files\"。
-                                   # 路径中有空格，需要加双引号。
+    workdir: '"C:\Program Files\"'
 -   id: 'ahk'
     name: 'AutoHotkey'
     icon: 'ahk.png'
-    command: '"C:\Program Files\AutoHotkey\AutoHotkeyU64.exe" "D:\My Scripts\曹操快切.ahk"' # 应用路径和参数中都有空格，都需要加双引号
+    command: '"C:\Program Files\AutoHotkey\AutoHotkeyU64.exe" "D:\My Scripts\曹操快切.ahk"'

@@ -1,66 +1,44 @@
 <html>
 <head>
-<title>{{title}}</title>
+<title>PyDeck</title>
+<link rel="stylesheet" href="/static/css/{{theme}}.css" />
 <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
 <style>
-    a {
-        text-decoration: none;
-    }
-    .button {
-        display: inline-block;
-        width: {{icon_width}}%;
-        margin: 5px;
-    }
-    .square {
-        width: 100%;
-        height: 0px;
-        padding-bottom: 100%;
-        position: relative;
-    }
-    .icon {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        border: 3px solid darkgray;
-        border-radius: 10%;
-        background-color: lightgray;
-    }
-    .label {
-        display: {{'' if show_label else 'none'}};
-        width: 100%;
-        margin-top: 10px;
-        border: 3px solid darkgray;
-        border-radius: 10px;
-        background-color: lightgray;
-        text-align: center;
-        color: black;
-        font-size: 1em;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+.icon_width {
+    width: {{icon_width}}%;
+}
+.label_vis {
+    {{'' if show_label else 'display: none;'}}
+}
 </style>
 </head>
-<body style="background-color: #1E1E1E;">
-    <div class="label" style="font-size: 1.5em">{{title}}</div>
-    <a class="button" href="/reload">
+<body>
+    <!-- PyDeck version: {{version}} -->
+    <div class="title label_vis">{{title}}</div>
+    %for app in apps:
+    %if app['id']=='<RELOAD>':
+    <a class="button icon_width" href="/reload">
         <div class="square">
-            <img class="icon" style="border-color: green;" src="/icon/RELOAD.png" />
+            <img class="icon icon_reload" src="/icon/RELOAD.png" />
         </div>
-        <div class="label" style="border-color: green;">
+        <div class="label label_reload label_vis">
             * RELOAD *
         </div>
     </a>
-    %for app in apps:
-    <a class="button" href="/action/{{app['id']}}">
+    %elif app['id']=='<BR>':
+    <br>
+    %else:
+    <a class="button icon_width" href="/action/{{app['id']}}">
         <div class="square">
             <img class="icon" src="/icon/{{app['icon']}}" />
         </div>
-        <div class="label">
+        <div class="label label_vis">
             {{app['name']}}
         </div>
     </a>
     %end
-    <div id="div_img" style="display:none;position:fixed;left:5%;top:5%;width:90%;height:90%;border:5px dashed greenyellow;background-color:whitesmoke;background-size:100% 100%;font-size:10em;color:green;text-align:center;" onclick="javascript:stop_show=true;" />
+    %end
+    <div id="div_scr" onclick="javascript:stop_show();" class="screenshot" style="display:none;" />
 </body>
 <script language="javascript">
 function get_query_params(query) {
@@ -72,29 +50,41 @@ function get_query_params(query) {
     }
     return obj;
 }
-var stop_show = false;
-/* var div_img = document.getElementById("div_img"); */
-var div_img = $('#div_img');
-function show_screenshot(appid, loop_num){
-    console.log(loop_num);
-    if (loop_num <= 10 && !stop_show) {
-        setTimeout(show_screenshot, 1000, appid, loop_num+1);
-        /* div_img.fadeOut(500); */
-        var ts = new Date().getTime();
-        div_img.css("background-image", 'url(/static/screenshot/'+appid+'.png?ts='+ts+')');
-        div_img.text(loop_num);
-        div_img.show(700);
-    } else {
-        location = "/";
-    }
-}
 var url = location.search;
 if (url.length > 0) {
     params = get_query_params(url.substr(1));
     if (params.status=="succ") {
-        setTimeout(show_screenshot, 1000, params.appid, 1)
+        post_action(params);
     }
 }
+function post_action(params) {
+    /*
+    // 运行命令后显示10秒截屏画面，需配合后台 post-action 截屏命令
+    // 【警告】在我的 Kindle pw 上有时会导致重启
+    show_me = true;
+    setTimeout(show_screenshot, 1000, params.appid, 10);
+    //*/
+    return;
+}
 
+var show_me = true;
+var div_scr = $('#div_scr');
+function show_screenshot(appid, loop_num){
+    // console.log(loop_num);
+    if (loop_num > 0 && show_me) {
+        setTimeout(show_screenshot, 1000, appid, loop_num-1);
+        // 在静态页面连接后接时间戳，强制刷新不使用缓存
+        var ts = new Date().getTime();
+        div_scr.css("background-image", 'url(/static/screenshot/'+appid+'.png?ts='+ts+')');
+        div_scr.text(loop_num);
+        div_scr.show(700);
+    } else {
+        location = "/";
+    }
+}
+function stop_show() {
+    show_me = false;
+    div_scr.hide();
+}
 </script>
 </html>
