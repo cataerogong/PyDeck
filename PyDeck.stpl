@@ -1,11 +1,14 @@
 <html>
 <head>
 <title>PyDeck</title>
+<meta name="apple-mobile-web-app-title" content="PyDeck">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" sizes="256x256" href="/icon/PyDeck.png" />
 <link rel="stylesheet" href="/static/css/{{theme}}.css" />
-<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
 <style>
 .icon_width {
-    width: {{icon_width}}%;
+    width: {{icon_width}}vw;
 }
 .label_vis {
     {{'' if show_label else 'display: none;'}}
@@ -38,8 +41,10 @@
     </a>
     %end
     %end
-    <div id="div_scr" onclick="javascript:stop_show();" class="screenshot" style="display:none;" />
-</body>
+    <div id="div_scr" onclick="javascript:stop_show();" class="screenshot" style="display:none;"></div>
+
+<!-- script ------------------------------------------------------>
+<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
 <script language="javascript">
 function get_query_params(query) {
     var obj = {};
@@ -87,4 +92,5 @@ function stop_show() {
     div_scr.hide();
 }
 </script>
+</body>
 </html>
