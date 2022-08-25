@@ -1,0 +1,17 @@
+port: 7777
+# pre_action: ''
+# 执行命令后以0.5s间隔连续截屏20次
+# post_action: 'nircmd.exe loop 20 500 savescreenshot "{PYDECK_PATH}\static\screenshot\{APPID}.png"'
+apps:
+-   id: 'notepad'
+    command: 'notepad.exe'
+
+-   id: 'edit_hosts'
+    command: 'notepad.exe C:\Windows\System32\drivers\etc\hosts'
+
+-   id: 'cmd'
+    command: 'C:\Windows\System32\cmd.exe'
+    workdir: '"C:\Program Files\"'
+
+-   id: 'ahk'
+    command: '"C:\Program Files\AutoHotkey\AutoHotkeyU64.exe" "D:\My Scripts\曹操快切.ahk"'

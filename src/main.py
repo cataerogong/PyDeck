@@ -1,14 +1,17 @@
 import os.path
 import os
+import sys
 
-from bottle import run, static_file, SimpleTemplate, get, redirect
+from bottle import run, static_file, get, route
 import chardet
 import yaml
 
-_version = '0.2.0'
+_version = '0.3.0-wip'
 config = None
-stpl = None
+# pydeck_path = os.path.split(os.path.abspath(sys.argv[0]))[0]
 pydeck_path = os.path.abspath(os.path.curdir)
+cfg_server_f = os.path.join(pydeck_path, 'config/server.yaml')
+cfg_client_f = os.path.join(pydeck_path, 'config/client.yaml')
 
 def open_any_enc(filename, mode='r', default_encoding='ascii'):
     """ open “自动识别文件编码”版本
@@ -26,48 +29,41 @@ def open_any_enc(filename, mode='r', default_encoding='ascii'):
     encoding = r['encoding'] if r and r['encoding'] else default_encoding
     return open(filename, mode, encoding=encoding)
 
-def init():
-    global config, stpl
-    with open_any_enc('PyDeck.yaml', 'r') as f:
+def resp(errcode:int, msg:str):
+    return {'errcode': errcode, 'msg':msg}
+
+def load_cfg():
+    global config
+    with open_any_enc(cfg_server_f, 'r') as f:
         config = yaml.safe_load(f)
-    with open_any_enc('PyDeck.stpl', 'r') as f:
-        stpl = SimpleTemplate(source=f)
     print('---- config:')
     print(yaml.dump(config, default_flow_style=False, sort_keys=False))
 
 @get('/')
-def mainpage():
-    return stpl.render(
-        version=_version,
-        title=config['Title'],
-        theme=config.get('Theme', 'default'),
-        icon_width=int(100/config['Icons Per Line'])-2,
-        show_label=config['Show Label'],
-        apps=config.get('Apps', [])
-        )
-    # return template('PyDeck.stpl', title=config['Title'], apps=config['Apps'])
+@get('/<filename:re:(?!_action_|_config_).+>')
+def get_static_file(filename: str='index.html'):
+    return static_file(filename, root=os.path.join(pydeck_path, 'static/'))
 
-@get('/icon/<filename>')
-def icon(filename: str):
-    return static_file(filename, root=os.path.abspath('icon/'))
+@get('/_config_')
+def get_config():
+    with open_any_enc(cfg_client_f, 'r') as f:
+        cfg = yaml.safe_load(f)
+    return cfg
 
-@get('/static/<filename:re:.+>')
-def icon(filename: str):
-    return static_file(filename, root=os.path.abspath('static/'))
-
-@get('/reload')
+@route('/_action_/RELOAD')
 def reload():
-    init()
-    redirect('/')
+    load_cfg()
+    return resp(0, 'ok')
 
-@get('/action/<appid>')
+@route('/_action_/<appid>')
 def action(appid: str):
-    for app in config['Apps']:
+    ret = resp(404, f'Can not find app [{appid}]')
+    for app in config['apps']:
         if app['id'] == appid:
-            pre = str(config.get('Pre-action', ''))\
+            pre = str(config.get('pre-action', ''))\
                 .replace('{PYDECK_PATH}', pydeck_path)\
                 .replace('{APPID}', appid)
-            post = str(config.get('Post-action', ''))\
+            post = str(config.get('post-action', ''))\
                 .replace('{PYDECK_PATH}', pydeck_path)\
                 .replace('{APPID}', appid)
             cmd = str(app['command'])\
@@ -88,10 +84,11 @@ def action(appid: str):
                 print('---- Run post-action: {}'.format(post))
                 os.system('START "" /I {}'.format(post))
             print('')
+            ret = resp(0, 'success')
             break
-    redirect('/?status=succ&appid={}'.format(appid))
+    return ret
 
 if __name__ == '__main__':
     print('---- version:', _version)
-    init()
-    run(host='0.0.0.0', port=config['Port'], server='paste')
+    load_cfg()
+    run(host='0.0.0.0', port=config['port'], server='paste')
