@@ -9,8 +9,8 @@ import chardet
 import yaml
 
 _version = '0.3.0-wip'
-# pydeck_path = os.path.split(os.path.abspath(sys.argv[0]))[0]
-pydeck_path = os.path.abspath(os.path.curdir)
+pydeck_path = os.path.split(os.path.abspath(sys.argv[0]))[0]
+# pydeck_path = os.path.abspath(os.path.curdir)
 cfg_server_f = os.path.join(pydeck_path, 'config/server.yaml')
 cfg_client_f = os.path.join(pydeck_path, 'config/client.yaml')
 
@@ -62,8 +62,6 @@ def load_cfg():
     print(yaml.dump(d, default_flow_style=False, sort_keys=False))
     return ServerCfg(d)
 
-config = load_cfg()
-
 @get('/')
 @get('/<filename:re:(?!_action_|_config_).+>')
 def get_static_file(filename: str='index.html'):
@@ -114,5 +112,5 @@ def action(appid: str):
 
 if __name__ == '__main__':
     print('---- version:', _version)
-    load_cfg()
+    config = load_cfg()
     run(host='0.0.0.0', port=config.port, server='paste')
