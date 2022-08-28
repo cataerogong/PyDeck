@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>PyDeck</title>
+<meta name="apple-mobile-web-app-title" content="PyDeck">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" sizes="256x256" href="/icon/PyDeck.png" />
+<link rel="stylesheet" href="/css/pydeck.css" />
+</head>
+<body>
+    <!-- PyDeck version: {{version}} -->
+    <div class="slogan label_vis"></div>
+    <div id="_apps_" style="width:100%;">
+    </div>
+    <div id="div_scr" onclick="stop_show();" class="screenshot" style="display:none;"></div>
+
+<!-- script ------------------------------------------------------>
+<script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
+<script language="javascript">
+// alert('a');
+var _config_ = {};
+function load_cfg() {
+    $.getJSON('/_config_').done(function(j) {
+        _config_ = j;
+        // alert(j);
+        layout();
+    }).fail(function(e) {
+        console.log(e);
+        alert('获取客户端配置时发生错误。')
+    });
+}
+function layout() {
+    console.log(_config_);
+    $('body').removeClass().addClass(_config_.theme);
+    $('.slogan').text(_config_.slogan);
+    if (_config_.bg_image) {
+        $('body').css('background-image', 'url('+_config_.bg_image+')');
+    }
+    _config_.apps.forEach(function(app) {
+        if (app) {
+            var app_ctl = $(
+                '<a id="_app_'+app.id+'" class="button icon_width" onclick="call(\''+app.id+'\');">\
+                    <div class="square">\
+                        <img class="icon" src="'+app.icon+'"></img>\
+                    </div>\
+                    <div class="label label_vis">'+app.label+'</div>\
+                </a>');
+            $('#_apps_').append(app_ctl);
+        } else {
+            $('#_apps_').append('<br>');
+        }
+    });
+    if (_config_.show_label) {
+        $('.label_vis').show();
+    } else {
+        $('.label_vis').hide();
+    }
+}
+load_cfg();
+
+function call(action) {
+    $.getJSON('/_action_/'+ action).done(function(j) {
+        console.log(action, '=>', j);
+    });
+}
+
+function get_query_params(query) {
+    var obj = {};
+    var arr = query.split("&");
+    for (i=0;i<arr.length;i++) {
+        arr2 = arr[i].split("=");
+        obj[arr2[0]] = arr2[1];
+    }
+    return obj;
+}
+var url = location.search;
+if (url.length > 0) {
+    params = get_query_params(url.substr(1));
+    if (params.status=="succ") {
+        post_action(params);
+    }
+}
+function post_action(params) {
+    /*
+    // 运行命令后显示10秒截屏画面，需配合后台 post-action 截屏命令
+    // 【警告】在我的 Kindle pw 上有时会导致重启
+    show_me = true;
+    setTimeout(show_screenshot, 1000, params.appid, 10);
+    //*/
+    return;
+}
+
+var show_me = true;
+var div_scr = $('#div_scr');
+function show_screenshot(appid, loop_num){
+    // console.log(loop_num);
+    if (loop_num > 0 && show_me) {
+        setTimeout(show_screenshot, 1000, appid, loop_num-1);
+        // 在静态页面连接后接时间戳，强制刷新不使用缓存
+        var ts = new Date().getTime();
+        div_scr.css("background-image", 'url(/static/screenshot/'+appid+'.png?ts='+ts+')');
+        div_scr.text(loop_num);
+        div_scr.show(700);
+    } else {
+        location = "/";
+    }
+}
+function stop_show() {
+    show_me = false;
+    div_scr.hide();
+}
+</script>
+</body>
+</html>
