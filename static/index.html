@@ -9,8 +9,8 @@
 </head>
 <body>
     <!-- PyDeck version: {{version}} -->
-    <div class="slogan label_vis"></div>
-    <div id="_apps_" style="width:100%;">
+    <div class="slogan"></div>
+    <div id="apps_container" class="apps-container">
     </div>
     <div id="div_scr" onclick="stop_show();" class="screenshot" style="display:none;"></div>
 
@@ -36,27 +36,35 @@ function layout() {
     if (_config_.bg_image) {
         $('body').css('background-image', 'url('+_config_.bg_image+')');
     }
+    var full_width = document.body.clientWidth;
+    var grid_unit = (full_width - 20.0) / _config_.x_grid;
+    try {
+        var default_width = (parseInt(_config_.default_icon_width) * grid_unit).toString() + "px";
+    } catch(e) {
+        var default_width = _config_.default_icon_width;
+    }
+    var apps_ctnr = $('#apps_container').empty();
     _config_.apps.forEach(function(app) {
         if (app) {
-            var app_ctl = $(
-                '<a id="_app_'+app.id+'" class="button icon_width" onclick="call(\''+app.id+'\');">\
-                    <div class="square">\
-                        <img class="icon" src="'+app.icon+'"></img>\
+            apps_ctnr.append(
+                '<div id="app_'+app.id+'" class="app-box" style="width:'+default_width+';">\
+                    <div class="app-frame" onclick="call(\''+app.id+'\');">\
+                        <div class="square" style="padding-top: 50%;"><img class="icon" src="'+app.icon+'"></img></div>\
+                        <div class="label label-vis">'+app.label+'</div>\
                     </div>\
-                    <div class="label label_vis">'+app.label+'</div>\
-                </a>');
-            $('#_apps_').append(app_ctl);
+                </div>');
         } else {
-            $('#_apps_').append('<br>');
+            apps_ctnr.append('<br>');
         }
     });
     if (_config_.show_label) {
-        $('.label_vis').show();
+        $('.label-vis').show();
     } else {
-        $('.label_vis').hide();
+        $('.label-vis').hide();
     }
 }
 load_cfg();
+window.onresize = layout;
 
 function call(action) {
     $.getJSON('/_action_/'+ action).done(function(j) {

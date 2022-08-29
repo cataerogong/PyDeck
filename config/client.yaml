@@ -1,9 +1,9 @@
 slogan: '极端低配 / 无售后 / 功能全靠 DIY 版 Deck'
 theme: 'dark'
-show_label: true
+show_label: false
 bg_image: ''
-x_grid: 100 # （最大100）网格数量，表示把整个页面宽度分为多少网格。这也是网格定位的基本长度单位。
-default_icon_width: '10' # 不带单位（纯数字），表示采用网格定位；也支持各种 css 单位（px, cm, em ...）。下面的 width, height, left, top 同理。
+x_grid: 8 # （最大100）网格数量，表示把整个页面宽度分为多少网格。这也是网格定位的基本长度单位。
+default_icon_width: '1' # 不带单位（纯数字），表示采用网格定位；也支持各种 css 单位（px, cm, em ...）。下面的 width, height, left, top 同理。
 # default_icon_height: '4' # 可不设置，默认与宽度相同，图标显示为正方形
 layout: 'stream' # 'stream', 'grid'
 
@@ -16,17 +16,42 @@ apps:
     # top: '0'
     # left: '0'
 
--   id: 'SCREENSHOT'
-    label: '* 截屏 *'
-    icon: '/icon/SCREENSHOT.png'
-    width: '2'
-    # height: '2'
-
 -
+
+# -   id: 'SCREENSHOT'
+#     label: '* 截屏 *'
+#     icon: '/icon/SCREENSHOT.png'
+#     width: '2'
+#     height: '2'
+
+# -
 
 -   id: 'notepad'
     label: 'Notepad'
+    icon: '/icon/test.jpg'
+-   id: 'notepad'
+    label: 'Notepad'
     icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+-   id: 'notepad'
+    label: 'Notepad'
+    icon: '/icon/notepad.png'
+
+-
 
 -   id: 'edit_hosts'
     label: '编辑 hosts'
@@ -42,3 +67,20 @@ apps:
     label: 'AutoHotkey'
     icon: '/icon/ahk.png'
 
+-
+
+-   id: 'ahk'
+    label: 'AutoHotkey'
+    icon: '/icon/ahk.png'
+
+-
+
+-   id: 'ahk'
+    label: 'AutoHotkey'
+    icon: '/icon/ahk.png'
+
+-
+
+-   id: 'ahk'
+    label: 'AutoHotkey'
+    icon: '/icon/ahk.png'

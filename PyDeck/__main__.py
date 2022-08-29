@@ -72,10 +72,14 @@ def get_client_config():
     with open_any_enc(cfg_client_f, 'r') as f:
         cfg = yaml.safe_load(f)
     cfg['grid_size'] = (100.0 / cfg['x_grid'])
-    try:
-        cfg['default_icon_width'] = str(cfg['grid_size'] * int(cfg['default_icon_width'])) + 'vw'
-    except Exception as e:
-        print(e)
+    # try:
+    #     cfg['default_icon_width'] = str(cfg['grid_size'] * int(cfg['default_icon_width'])) + '%'
+    # except Exception as e:
+    #     print(e)
+    if cfg['layout'] == 'stream':
+        for app in cfg['apps']:
+            if app:
+                app['width'] = cfg['default_icon_width']
     return cfg
 
 @route('/_action_/RELOAD')
