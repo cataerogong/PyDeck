@@ -46,15 +46,18 @@ a {
     z-index: 999;
 }
 .apps-container {
-    margin-top: 2rem;
+    position: absolute;
+    top: 2rem;
+    left: 0px;
     width: 100%;
 }
 .app-box {
-    display: inline-table;
+    display: inline-block;
     cursor: pointer;
+    position: absolute;
 }
 .app-frame {
-    margin: 5px;
+    /* margin: 5px; */
 }
 .square {
     position: relative;
@@ -64,26 +67,29 @@ a {
     height: 100%; */
 }
 .icon {
-    background-color: lightgray;
-    background-color: var(--icon-bg-color);
-    border: 1px solid darkgray;
-    border: 1px solid var(--icon-border-color);
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    background-color: lightgray;
+    background-color: var(--icon-bg-color);
+    border: 1px solid darkgray;
+    border: 0px solid var(--icon-border-color);
     border-radius: 10px;
 }
 .label {
+    width: 100%;
+    height: 1.3rem;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
     background-color: lightgray;
     background-color: var(--label-bg-color);
     border: 1px solid darkgray;
-    border: 1px solid var(--label-border-color);
-    width: 100%;
-    height: 1.5rem;
-    margin-top: 5px;
-    border-radius: 5px;
+    border: 0px solid var(--label-border-color);
+    margin-bottom: 0px;
+    border-radius: 0px 0px 10px 10px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;

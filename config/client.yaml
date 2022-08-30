@@ -1,54 +1,54 @@
 slogan: '极端低配 / 无售后 / 功能全靠 DIY 版 Deck'
 theme: 'dark'
-show_label: false
+show_label: true
 bg_image: ''
-x_grid: 8 # （最大100）网格数量，表示把整个页面宽度分为多少网格。这也是网格定位的基本长度单位。
-default_icon_width: '1' # 不带单位（纯数字），表示采用网格定位；也支持各种 css 单位（px, cm, em ...）。下面的 width, height, left, top 同理。
-# default_icon_height: '4' # 可不设置，默认与宽度相同，图标显示为正方形
-layout: 'stream' # 'stream', 'grid'
+x_grid: 10 # 网格数量，表示把整个页面宽度分为多少网格。这也是基本长度单位。
+default_icon_width: 1
+# default_icon_height: 1 # 可不设置，默认与宽度相同，图标显示为正方形
+# layout: 'stream' # 'stream', 'grid'
 
 apps:
 -   id: 'RELOAD'
     label: '* RELOAD *'
     icon: '/icon/RELOAD.png'
-    width: '2'
-    # height: '2'
-    # top: '0'
-    # left: '0'
+    width: 2
+    height: 3
+    left: 1
+    top: 1
 
 -
 
 # -   id: 'SCREENSHOT'
 #     label: '* 截屏 *'
 #     icon: '/icon/SCREENSHOT.png'
-#     width: '2'
-#     height: '2'
+#     width: 2
+#     height: 2
 
 # -
 
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np1'
+    label: 'Notepad-1'
     icon: '/icon/test.jpg'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np2'
+    label: 'Notepad-2'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np3'
+    label: 'Notepad-3'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np4'
+    label: 'Notepad-4'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np5'
+    label: 'Notepad-5'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np6'
+    label: 'Notepad-6'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np7'
+    label: 'Notepad-7'
     icon: '/icon/notepad.png'
--   id: 'notepad'
-    label: 'Notepad'
+-   id: 'np8'
+    label: 'Notepad-8'
     icon: '/icon/notepad.png'
 
 -
@@ -56,31 +56,32 @@ apps:
 -   id: 'edit_hosts'
     label: '编辑 hosts'
     icon: '/icon/hosts.png'
-
 -   id: 'cmd'
     label: '命令提示符'
     icon: '/icon/cmd.png'
 
 -
 
--   id: 'ahk'
-    label: 'AutoHotkey'
+-   id: 'ahk1'
+    label: 'AHK-1'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk'
-    label: 'AutoHotkey'
+-   id: 'ahk2'
+    label: 'AutoHotkey-2'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk'
-    label: 'AutoHotkey'
+-   id: 'ahk3'
+    label: 'AutoHotkey-3'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk'
-    label: 'AutoHotkey'
+-   id: 'ahk4'
+    label: 'AutoHotkey-4'
     icon: '/icon/ahk.png'
+    left: 8
+    top: 3

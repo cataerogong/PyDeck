@@ -38,19 +38,16 @@ function layout() {
     }
     var full_width = document.body.clientWidth;
     var grid_unit = (full_width - 20.0) / _config_.x_grid;
-    try {
-        var default_width = (parseInt(_config_.default_icon_width) * grid_unit).toString() + "px";
-    } catch(e) {
-        var default_width = _config_.default_icon_width;
-    }
     var apps_ctnr = $('#apps_container').empty();
     _config_.apps.forEach(function(app) {
         if (app) {
             apps_ctnr.append(
-                '<div id="app_'+app.id+'" class="app-box" style="width:'+default_width+';">\
-                    <div class="app-frame" onclick="call(\''+app.id+'\');">\
-                        <div class="square" style="padding-top: 50%;"><img class="icon" src="'+app.icon+'"></img></div>\
-                        <div class="label label-vis">'+app.label+'</div>\
+                '<div id="app_'+app.id+'" class="app-box" style="top:'+(app.top*grid_unit)+'px;left:'+(app.left*grid_unit)+'px;height:'+(app.height*grid_unit)+'px;width:'+(app.width*grid_unit)+'px;">\
+                    <div class="app-frame" style="margin:5px;" onclick="call(\''+app.id+'\');">\
+                        <div class="square" style="padding-top:'+(app.height*grid_unit-10)+'px;">\
+                            <img class="icon" src="'+app.icon+'"></img>\
+                            <div class="label label-vis">'+app.label+'</div>\
+                        </div>\
                     </div>\
                 </div>');
         } else {
