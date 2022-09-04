@@ -3,5 +3,6 @@ bottle==0.12.21
 chardet==5.0.0
 paste==3.5.1
 PyYAML==6.0
+Pillow==9.2.0
 # Build
 PyInstaller==5.2
