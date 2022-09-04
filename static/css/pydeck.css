@@ -94,16 +94,12 @@ a {
     white-space: nowrap;
     overflow: hidden;
 }
-.screenshot {
+#screenshot {
     position: fixed;
-    left: 5%;
-    top: 5%;
-    width: 90%;
-    height: 90%;
+    left: 0;
+    top: 0;
+    width: 98%;
+    height: 98%;
     border: 5px solid greenyellow;
-    background-color: whitesmoke;
-    background-size: 100% 100%;
-    font-size: 10em;
-    color: green;
-    text-align: center;
+    z-index: 1000;
 }

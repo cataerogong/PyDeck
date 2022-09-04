@@ -1,18 +1,21 @@
+from datetime import datetime
 import os.path
 import os
 import subprocess
 import sys
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from bottle import run, static_file, get, route
 import chardet
 import yaml
+from PIL.ImageGrab import grab
 
 _version = '0.3.0-wip'
 pydeck_path = os.path.split(os.path.abspath(sys.argv[0]))[0]
 # pydeck_path = os.path.abspath(os.path.curdir)
 cfg_server_f = os.path.join(pydeck_path, 'config/server.yaml')
 cfg_client_f = os.path.join(pydeck_path, 'config/client.yaml')
+web_root = os.path.join(pydeck_path, 'static/')
 
 class ServerApp:
     def __init__(self, d: dict):
@@ -52,8 +55,8 @@ def open_any_enc(filename, mode='r', default_encoding='ascii'):
     encoding = r['encoding'] if r and r['encoding'] else default_encoding
     return open(filename, mode, encoding=encoding)
 
-def resp(errcode:int, msg:str):
-    return {'errcode': errcode, 'msg':msg}
+def resp(errcode:int, msg:str, data:Optional[Union[Dict, List]]=None):
+    return {'errcode': errcode, 'msg':msg, 'data':data}
 
 def load_cfg():
     with open_any_enc(cfg_server_f, 'r') as f:
@@ -136,8 +139,8 @@ class Layout:
         if w > self.x_grid:
             w = self.x_grid
         if (l is not None) and (t is not None):
-            t, l = self._reloc(t, l, h, w)
-            self._put(appid, t, l, h, w)
+            # t, l = self._reloc(t, l, h, w)
+            # self._put(appid, t, l, h, w)
             return t, l, h, w
         else:
             self.Y, self.X = self._reloc(self.Y, self.X, h, w)
@@ -176,20 +179,32 @@ def get_client_config():
         app.setdefault('height', cfg['default_icon_height'])
         app.setdefault('left', None)
         app.setdefault('top', None)
+        app.setdefault('z_index', 1)
     layout = Layout(x_grid)
     for app in cfg['apps']:
         if app:
+            if (app['left'] is not None) and (app['top'] is not None):
+                app['z_index'] = 2
             app['top'], app['left'], app['height'], app['width'] = layout.put(app['id'], app['height'], app['width'], app['top'], app['left'])
         else:
             layout.newline()
     layout.print()
     return cfg
 
-@route('/_action_/RELOAD')
+@route('/_server_/RELOAD')
 def reload():
     global config
     config = load_cfg()
     return resp(0, 'ok')
+
+@route('/_server_/SCREENSHOT')
+def screenshot():
+    ss_fp = f'screenshot/{datetime.now().strftime("%Y%m%d-%H%M%S")}.png'
+    try:
+        grab().save(os.path.join(web_root, ss_fp))
+    except Exception as e:
+        return resp(1, f'error: {e.__str__()}')
+    return resp(0, 'ok', {'js': f"setTimeout(show_screenshot,1000,'/{ss_fp}');"})
 
 @route('/_action_/<appid>')
 def action(appid: str):

@@ -12,9 +12,9 @@
     <div class="slogan"></div>
     <div id="apps_container" class="apps-container">
     </div>
-    <div id="div_scr" onclick="stop_show();" class="screenshot" style="display:none;"></div>
+    <img id="screenshot" onclick="stop_show();" title="Click to close" style="display:none;" />
 
-<!-- script ------------------------------------------------------>
+    <!-- script ------------------------------------------------------>
 <script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
 <script language="javascript">
 // alert('a');
@@ -42,10 +42,11 @@ function layout() {
     _config_.apps.forEach(function(app) {
         if (app) {
             apps_ctnr.append(
-                '<div id="app_'+app.id+'" class="app-box" style="top:'+(app.top*grid_unit)+'px;left:'+(app.left*grid_unit)+'px;height:'+(app.height*grid_unit)+'px;width:'+(app.width*grid_unit)+'px;">\
+                '<div id="app_'+app.id+'" class="app-box" title="Pos:(top='+app.top+',left='+app.left+')"\
+                 style="top:'+(app.top*grid_unit)+'px;left:'+(app.left*grid_unit)+'px;height:'+(app.height*grid_unit)+'px;width:'+(app.width*grid_unit)+'px;z-index:'+app.z_index+';">\
                     <div class="app-frame" style="margin:5px;" onclick="call(\''+app.id+'\');">\
                         <div class="square" style="padding-top:'+(app.height*grid_unit-10)+'px;">\
-                            <img class="icon" src="'+app.icon+'"></img>\
+                            <img class="icon" src="'+app.icon+'?t=1"></img>\
                             <div class="label label-vis">'+app.label+'</div>\
                         </div>\
                     </div>\
@@ -64,8 +65,31 @@ load_cfg();
 window.onresize = layout;
 
 function call(action) {
-    $.getJSON('/_action_/'+ action).done(function(j) {
+    var url = '';
+    switch(action) {
+        case '#RELOAD#':
+            url = '/_server_/RELOAD';
+            break;
+        case '#SCREENSHOT#':
+            url = '/_server_/SCREENSHOT';
+            break;
+        default:
+            url = '/_action_/'+ action;
+    }
+    $.getJSON(url).done(function(j) {
         console.log(action, '=>', j);
+        if (j.errcode) {
+            alert('PyDeck error ['+j.errcode+']: '+j.msg);
+        } else {
+            if (j.data) {
+                if (j.data.js) {
+                    eval(j.data.js);
+                }
+            }
+        }
+    }).fail(function(e) {
+        console.log(e);
+        alert('HTTP error ['+e.status+']: '+e.statusText);
     });
 }
 
@@ -95,24 +119,14 @@ function post_action(params) {
     return;
 }
 
-var show_me = true;
-var div_scr = $('#div_scr');
-function show_screenshot(appid, loop_num){
-    // console.log(loop_num);
-    if (loop_num > 0 && show_me) {
-        setTimeout(show_screenshot, 1000, appid, loop_num-1);
-        // 在静态页面连接后接时间戳，强制刷新不使用缓存
-        var ts = new Date().getTime();
-        div_scr.css("background-image", 'url(/static/screenshot/'+appid+'.png?ts='+ts+')');
-        div_scr.text(loop_num);
-        div_scr.show(700);
-    } else {
-        location = "/";
-    }
+var screenshot = $('#screenshot');
+function show_screenshot(ss_url){
+    var ts = new Date().getTime();
+    screenshot.attr('src', ss_url);
+    screenshot.show(700);
 }
 function stop_show() {
-    show_me = false;
-    div_scr.hide();
+    screenshot.hide();
 }
 </script>
 </body>

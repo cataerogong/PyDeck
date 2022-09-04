@@ -1,53 +1,53 @@
 slogan: '极端低配 / 无售后 / 功能全靠 DIY 版 Deck'
 theme: 'dark'
-show_label: true
+show_label: false
 bg_image: ''
-x_grid: 10 # 网格数量，表示把整个页面宽度分为多少网格。这也是基本长度单位。
-default_icon_width: 1
+x_grid: 20 # 网格数量，表示把整个页面宽度分为多少网格。这也是基本长度单位。
+default_icon_width: 2
 # default_icon_height: 1 # 可不设置，默认与宽度相同，图标显示为正方形
-# layout: 'stream' # 'stream', 'grid'
 
 apps:
--   id: 'RELOAD'
+-   id: '#RELOAD#'
     label: '* RELOAD *'
     icon: '/icon/RELOAD.png'
-    width: 2
+    width: 3
     height: 3
+    top: 0
     left: 1
-    top: 1
 
 -
 
-# -   id: 'SCREENSHOT'
-#     label: '* 截屏 *'
-#     icon: '/icon/SCREENSHOT.png'
-#     width: 2
-#     height: 2
+-   id: '#SCREENSHOT#'
+    label: '* 截屏 *'
+    icon: '/icon/SCREENSHOT.png'
+    width: 3
+    height: 3
 
-# -
+-
 
--   id: 'np1'
+-   id: 'notepad1'
     label: 'Notepad-1'
     icon: '/icon/test.jpg'
--   id: 'np2'
+    height: 3
+-   id: 'notepad'
     label: 'Notepad-2'
     icon: '/icon/notepad.png'
--   id: 'np3'
+-   id: 'notepad'
     label: 'Notepad-3'
     icon: '/icon/notepad.png'
--   id: 'np4'
+-   id: 'notepad'
     label: 'Notepad-4'
     icon: '/icon/notepad.png'
--   id: 'np5'
+-   id: 'notepad'
     label: 'Notepad-5'
     icon: '/icon/notepad.png'
--   id: 'np6'
+-   id: 'notepad'
     label: 'Notepad-6'
     icon: '/icon/notepad.png'
--   id: 'np7'
+-   id: 'notepad'
     label: 'Notepad-7'
     icon: '/icon/notepad.png'
--   id: 'np8'
+-   id: 'notepad'
     label: 'Notepad-8'
     icon: '/icon/notepad.png'
 
@@ -62,26 +62,26 @@ apps:
 
 -
 
--   id: 'ahk1'
+-   id: 'ahk'
     label: 'AHK-1'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk2'
+-   id: 'ahk'
     label: 'AutoHotkey-2'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk3'
+-   id: 'ahk'
     label: 'AutoHotkey-3'
     icon: '/icon/ahk.png'
 
 -
 
--   id: 'ahk4'
+-   id: 'ahk'
     label: 'AutoHotkey-4'
     icon: '/icon/ahk.png'
+    top: 4
     left: 8
-    top: 3
